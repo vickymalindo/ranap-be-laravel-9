@@ -13,16 +13,11 @@ clASs UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function raw()
+    public function rawRanap()
     {
-        // $data = DB::select("SELECT * FROM users LEFT JOIN posts ON sales.idcustomers = posts.user_id WHERE users.id = ?", [$id]);
-        $data = DB::select("SELECT TOP 10 treat_date AS indate, claim_no, member_no, member_name, nm_cus AS corporate, provider_name, vip_member, no_sj AS gl_no, nm_cabang AS member_branch, nm_cabang_transaksi AS host_branch, kdicd AS icd10, nm_holding AS customer_group, nm_plan_dtl AS covarage, ipstatus, no_kartu FROM VW_CLAIM_IP_MONITORING WHERE treat_date LIKE '%2019%' AND nm_holding ='BPJS KETENAGAKERJAAN' AND ipstatus ='RWT'");
+        $data = DB::select("SELECT treat_date AS indate, claim_no, member_no, member_name, nm_cus AS corporate, provider_name, vip_member, no_sj AS gl_no, nm_cabang AS member_branch, nm_cabang_transaksi AS host_branch, kdicd AS icd10, nm_holding AS customer_group, nm_plan_dtl AS covarage, ipstatus, no_kartu FROM VW_CLAIM_IP_MONITORING WHERE treat_date LIKE '%2024%' AND nm_holding ='BPJS KETENAGAKERJAAN' AND ipstatus ='RWT'");
 
-        return response()->json([
-            'message' => 'Get successfully',
-            'data' => $data,
-            'status' => 200,
-        ]);
+        return view('ranap', ['data' => $data]);
     }
 
     public function index()

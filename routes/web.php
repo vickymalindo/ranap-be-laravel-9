@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('test', function () {
-    return view('layout.index');
-});
+// Route::get('ranap', function () {
+//     return view('layout.index');
+// });
+Route::get('ranap', [UserController::class, 'rawRanap']);

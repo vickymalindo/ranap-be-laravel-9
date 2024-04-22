@@ -15,7 +15,7 @@ clASs UserController extends Controller
 
     public function rawRanap()
     {
-        $data = DB::select("SELECT treat_date AS indate, claim_no, member_no, member_name, nm_cus AS corporate, provider_name, vip_member, no_sj AS gl_no, nm_cabang AS member_branch, nm_cabang_transaksi AS host_branch, kdicd AS icd10, nm_holding AS customer_group, nm_plan_dtl AS covarage, ipstatus, no_kartu FROM VW_CLAIM_IP_MONITORING WHERE treat_date LIKE '%2024%' AND nm_holding ='BPJS KETENAGAKERJAAN' AND ipstatus ='RWT'");
+        $data = DB::select("SELECT treat_date AS indate, claim_no, member_no, member_name, nm_cus AS corporate, provider_name, vip_member, no_sj AS gl_no, nm_cabang AS member_branch, nm_cabang_transaksi AS host_branch, kdicd AS icd10, nm_holding AS customer_group, nm_plan_dtl AS covarage, ipstatus, no_kartu FROM VW_CLAIM_IP_MONITORING WHERE treat_date LIKE '%2019%' AND nm_holding ='BPJS KETENAGAKERJAAN' AND ipstatus ='RWT'");
 
         return view('ranap', ['data' => $data]);
     }

@@ -20,4 +20,4 @@ Route::get('/', function () {
 // Route::get('ranap', function () {
 //     return view('layout.index');
 // });
-Route::get('ranap', [UserController::class, 'rawRanap']);
+Route::get('ranap', [UserController::class, 'viewRanap']);

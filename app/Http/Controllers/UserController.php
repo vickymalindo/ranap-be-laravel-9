@@ -13,11 +13,48 @@ clASs UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function rawRanap()
+    public function viewRanap()
     {
-        $data = DB::select("SELECT treat_date AS indate, claim_no, member_no, member_name, nm_cus AS corporate, provider_name, vip_member, no_sj AS gl_no, nm_cabang AS member_branch, nm_cabang_transaksi AS host_branch, kdicd AS icd10, nm_holding AS customer_group, nm_plan_dtl AS covarage, ipstatus, no_kartu FROM VW_CLAIM_IP_MONITORING WHERE treat_date LIKE '%2024%' AND nm_holding ='BPJS KETENAGAKERJAAN' AND ipstatus ='RWT'");
+        $data = DB::select("SELECT CAST(VW_CLAIM_IP_MONITORING.treat_date as date) as Tgl_Rawat 
+        ,VW_CLAIM_IP_MONITORING.ipstatus
+        ,VW_CLAIM_IP_MONITORING.nm_cabang_transaksi as Host_Branch_BO_NAYAKA
+        ,VW_CLAIM_IP_MONITORING.nm_cabang as Member_Branch_BO_NAYAKA
+        ,VW_CLAIM_IP_MONITORING.claim_no
+        ,VW_CLAIM_IP_MONITORING.provider_name 
+        ,VW_CLAIM_IP_MONITORING.no_kartu
+        ,VW_CLAIM_IP_MONITORING.employee_name as Employee_Name
+        ,VW_CLAIM_IP_MONITORING.member_name as Patient_Name
+        ,VW_CLAIM_IP_MONITORING.nm_cus as Unit_Kerja_Perusahaan
+        ,tbl_icd.nama as DX_Masuk
+        ,VW_CLAIM_IP_MONITORING_OPEN.st_claim 
+        FROM [MCSYS].[dbo].[VW_CLAIM_IP_MONITORING] inner join VW_CLAIM_IP_MONITORING_OPEN on VW_CLAIM_IP_MONITORING.claim_no = VW_CLAIM_IP_MONITORING_OPEN.claim_no inner join tbl_icd on VW_CLAIM_IP_MONITORING.kdicd = tbl_icd.kdicd 
+        where VW_CLAIM_IP_MONITORING.treat_date like '%2024%' and VW_CLAIM_IP_MONITORING.nm_holding ='BPJS KETENAGAKERJAAN' and VW_CLAIM_IP_MONITORING.ipstatus ='RWT' and VW_CLAIM_IP_MONITORING_OPEN.st_claim !='200' order by VW_CLAIM_IP_MONITORING.treat_date DESC");
 
         return view('ranap', ['data' => $data]);
+    }
+
+    public function apiRanap()
+    {
+        $data = DB::select("SELECT CAST(VW_CLAIM_IP_MONITORING.treat_date as date) as Tgl_Rawat 
+        ,VW_CLAIM_IP_MONITORING.ipstatus
+        ,VW_CLAIM_IP_MONITORING.nm_cabang_transaksi as Host_Branch_BO_NAYAKA
+        ,VW_CLAIM_IP_MONITORING.nm_cabang as Member_Branch_BO_NAYAKA
+        ,VW_CLAIM_IP_MONITORING.claim_no
+        ,VW_CLAIM_IP_MONITORING.provider_name 
+        ,VW_CLAIM_IP_MONITORING.no_kartu
+        ,VW_CLAIM_IP_MONITORING.employee_name as Employee_Name
+        ,VW_CLAIM_IP_MONITORING.member_name as Patient_Name
+        ,VW_CLAIM_IP_MONITORING.nm_cus as Unit_Kerja_Perusahaan
+        ,tbl_icd.nama as DX_Masuk
+        ,VW_CLAIM_IP_MONITORING_OPEN.st_claim 
+        FROM [MCSYS].[dbo].[VW_CLAIM_IP_MONITORING] inner join VW_CLAIM_IP_MONITORING_OPEN on VW_CLAIM_IP_MONITORING.claim_no = VW_CLAIM_IP_MONITORING_OPEN.claim_no inner join tbl_icd on VW_CLAIM_IP_MONITORING.kdicd = tbl_icd.kdicd 
+        where VW_CLAIM_IP_MONITORING.treat_date like '%2024%' and VW_CLAIM_IP_MONITORING.nm_holding ='BPJS KETENAGAKERJAAN' and VW_CLAIM_IP_MONITORING.ipstatus ='RWT' and VW_CLAIM_IP_MONITORING_OPEN.st_claim !='200' order by VW_CLAIM_IP_MONITORING.treat_date DESC");
+        
+        return response()->json([
+            'message' => 'Get successfully',
+            'data' => $data,
+            'status' => 200,
+          ]);
     }
 
     public function index()
